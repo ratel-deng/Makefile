@@ -1,0 +1,6 @@
+关键字：ifeq、else、endif
+ifeq ( , )
+else
+endif
+
+还有ifneq，含义与ifeq相反
