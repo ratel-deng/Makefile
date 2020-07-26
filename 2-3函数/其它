@@ -1,0 +1,11 @@
+$(foreach VAR,LIST,TEXT)
+依次将LIST赋值给VAR，每次赋值之后，执行TEXT
+TEXT是表达式，可以是函数
+
+举例
+nname:=a b c d
+files:=$(foreach n,${name},${n}.o)
+此时files的值为a.o b.o c.o d.o
+
+$(shell echo "hello Makefile!")
+在Makefile使用shell命令
