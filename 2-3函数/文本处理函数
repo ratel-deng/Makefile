@@ -1,0 +1,15 @@
+$(subst .c,.o,$(strip ${demo}))
+subst：将变量值的.c替换为.o
+strip：将demo中的空格去掉
+
+$(patsubst %.c,%.d,${demo})
+parsubst：模式替换
+
+$(findsting xxx,${demo})
+在demo中查找xxx，查找到返回xxx，找不到返回空
+
+$(demo:.c=.o)
+在demo中.c替换为.d
+
+$(filter %.c %.h,${demo})
+将demo中的.c .h文件过滤给filter

@@ -1,0 +1,23 @@
+$(dir ${demo})
+取目录，返回demo变量里文件名的目录
+
+$(notdir ${demo})
+取文件，返回demo变量里文件名
+
+$(suffix ${demo})
+取后缀，返回demo变量里文件名后缀
+
+$(basename ${demo})
+取前缀，返回demo变量不带后缀
+
+$(addsuffix .c,${demo})
+加后缀，返回demo变量加上后缀
+
+$(addprefix /usr/lib/,${demo})
+添加前缀，返回demo变量加上前缀
+
+$(wildcard *.c)
+列举当前目录的.c文件，且自动添加路径
+
+$(join a b,1 2 3)
+连接函数，返回a1 b2 3
