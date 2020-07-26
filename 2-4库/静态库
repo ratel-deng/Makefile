@@ -1,0 +1,8 @@
+ar rcs libxxx.a(前缀lib后缀.a) xxx.o
+生成静态库文件
+
+生成的.o文件必须用-o和-c参数
+gcc -c xxx.o -o xxx.c
+
+gcc -o hello.out hello.o /.../xxx.a(带路径的静态库)
+生成可执行文件

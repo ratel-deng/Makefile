@@ -1,0 +1,10 @@
+gcc -o xxx.o -fPIC -c xxx.c
+生成动态库所需的与位置无关目标文件
+
+gcc -o libxxx.so -shared xxx.o
+生成动态库
+
+注：需要将.so动态库文件拷贝到/usr/lib/目录下
+
+gcc -o hello.out hello.o /.../xxx.so(带路径的动态库)
+生成可执行文件
