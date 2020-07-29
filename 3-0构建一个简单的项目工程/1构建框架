@@ -1,0 +1,82 @@
+主函数文件和主头文件
+(1)main.c文件：
+	位置：./Makefile/hello/main/
+	主函数main()所在的源文件
+	调用其它文件的函数
+(2)hello.h文件：
+	位置：./Makefile/hello/head/
+	main.c对应的头文件
+	使用#include调用各个模块的头文件，调用c库的头文件
+	定义一些宏
+
+编译成目标文件链接的模块
+(3)led.c：
+	位置：./Makefile/hello/led/
+	模拟显示模块，定义void led_init()函数，使用printf()打印This is led init版本号(版本号宏定义在hello.h里)。
+	编译成目标文件，然后直接连接
+(4)led.h：
+	位置：./Makefile/hello/head/
+	led.c对应的头文件
+	声明void led_init();
+(5)lcd.c：
+	位置：./Makefile/hello/lcd/
+	模拟LCD模块，定义void lcd_init()函数，使用printf()打印lcd init版本号(版本号宏定义在对应的头文件里)。
+	编译成目标文件，然后直接连接
+(6)lcd.h：
+	位置：./Makefile/hello/head/
+	lcd.c对应的头文件
+	宏定义lcd的版本号
+	声明void lcd_init();
+
+编译成静态库链接的模块
+(7)usb.c：
+	位置：./Makefile/hello/usb/
+	模拟USB模块，定义void usb_init()函数，使用printf()打印This is usb init版本号(版本号宏定义在hello.c里)。
+	编译成所需的目标文件，编译成静态库，再连接
+(8)usb.h：
+	位置：./Makefile/hello/head/
+	usb.c对应的头文件
+	声明void usb_init();
+(9)sound.c：
+	位置：./Makefile/hello/sound.c/
+	模拟sound模块，定义void sound_init()函数，使用printf()打印sound init版本号(版本号宏定义在对应的头文件里)。
+	编译成所需的目标文件，编译成静态库，再连接
+(6)sound.h：
+	位置：./Makefile/hello/head/
+	sound.c对应的头文件
+	宏定义sound的版本号
+	声明void sound_init();
+	
+编译成动态库链接的模块
+(7)net.c：
+	位置：./Makefile/hello/net/
+	模拟net模块，定义void net_init()函数，使用printf()打印This is net init版本号(版本号宏定义在hello.c里)。
+	编译成与位置无关的目标文件，编译成动态库，再连接
+(8)net.h：
+	位置：./Makefile/hello/head/
+	net.c对应的头文件
+	声明void net_init();
+(9)bluetooth.c：
+	位置：./Makefile/hello/bluetooth.c/
+	模拟bluetooth模块，定义void bluetooth_init()函数，使用printf()打印bluetooth init版本号(版本号宏定义在对应的头文件里)。
+	编译成与位置无关的目标文件，编译成动态库，再连接
+(10)bluetooth.h：
+	位置：./Makefile/hello/head/
+	bluetooth.c对应的头文件
+	宏定义bluetooth的版本号
+	声明void bluetooth_init();
+
+(11)heads.h：
+	位置：./Makefile/hello/head/
+	所有模块头文件的集合
+	
+	
+说明：该工程是为了实验Makefile
+	编译普通的目标文件及连接，静态库文件及连接，动态库文件及链接
+	对应的源文件改变重新编译Makefile
+	对应的头文件改变重新编译Makefile
+	头文件统一在head目录下
+	源文件在各自的目录下，且源文件目录应有一个Makefile，调用工程根目录的common.mk
+	在工程根目录，common.mk是共用的make脚本，负担编译各个模块和最后工程的连接
+	在工程根目录，Makefile负责调用各级目录的Makefile，清理目标文件，安装程序，卸载程序
+
