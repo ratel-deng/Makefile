@@ -11,7 +11,6 @@
 	aclocal
 (4)将configure.ac生成configure
 	autoconf
-(作用)生成检查系统特性、用户的一些包选项。configure是可移植的脚本文件，为了y
 
 生成Makefile.in部分(通用的Makefile)
 (1)手动写Makefile.am，该文件可以看作是对Makefile的配置文件
@@ -22,6 +21,8 @@
 	autoheader
 (3)自动添加缺省文件，这一步生成Makefile.in
 	automake -a或--add-missing
+
+(作用)生成检查系统特性、用户的一些包选项。configure是可移植的脚本文件，为了生成各个平台适合的Makefile
 
 生成Makefile，编译，安装，卸载
 (1)生成Makefile
