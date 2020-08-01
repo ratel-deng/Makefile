@@ -1,0 +1,25 @@
+Autotools是GNU发起的开源项目，用来为大型软件项目自动生成Makefile，遵循GPL协议
+
+Autotools工具包：
+	Autoconf，Automake，Libtool
+
+工具安装：
+	apt install autoconf
+	apt install automake
+	apt install libtool
+	
+发生问题，如果系统提示安装错误，需要安装对应的软件包
+
+Autotools自动创建Makefile的流程：
+(1)生成Makefile通用规则文件Makefile.in
+	手工编写Makefile.am文件
+	命令行执行automake：将Makefile.am->Makefile.in
+(2)生成配置脚本configure
+	命令行执行autoscan：生成configure.scan->configure.ac
+	修改、配置configure.ac
+	aclocal：生成aclocal.m4，存放autoconf运行需要的宏
+	autoconf：生成configure.ac->configure
+(3)通过configure生成Makefile
+	./configure：Makefile.in->Makefile
+	make
+	make install
