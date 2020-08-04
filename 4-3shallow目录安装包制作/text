@@ -1,0 +1,70 @@
+shallow目录：主程序放在顶层，个模块放在各个目录中
+	     为了管理方便，所有源程序及目录放在src目录下，工程顶层为src所在目录
+生成configure部分(配置脚本)
+(1)扫描项目生成configure.scan和autoscan.log
+	autoscan
+(2)修改configure.scan
+	mv configure.scan configure.ac
+	vi configure.ac
+	AC_INIT(包的名字，版本号，邮箱)
+	添加automake的宏 AM_INIT_AUTOMAKE
+	AC_OUTPUT(要生成的makefile，带路径，每个子目录都需要Makefile包括头文件目录)
+	添加静态库的宏
+	# Checks for libraries.
+	AC_PROG_RANLB
+(3)生成aclocal.m4宏文件，该文件集合了该工程里的宏
+	aclocal
+(4)将configure.ac生成configure
+	autoconf
+
+生成Makefile.in部分(通用的Makefile)
+(1)手动写Makefile.am，该文件可以看作是对Makefile的配置文件
+	工程顶层：
+	AUTOMAKE_OPTIONS = foreign	检查级别
+	SUBDIRS = src			递归处理子目录的Makefile.am
+	src目录：
+	AUTOMAKE_OPTIONS = foreign	检查级别
+	bin_PROGRAMS = hello		生成的文件
+	hello_SOURCES = main.c		所需的源文件
+	INCLUDES = -I head		所需头文件目录
+	hello_LDADD = bluetooth/libbluetooth.a lcd/liblcd.a led/libled.a net/libnet.a sound/libsound.a usb/libusb.a	所需的库文件
+	SUBDIRS = bluetooth head lcd led net sound usb	递归执行目录
+	src/各子目录：
+	AUTOMAKE_OPTIONS = foreign	检查级别
+	noinst_LIBRARIES = libxxx.a	生成的库文件，不安装到系统
+	libxxx_a_SOURCES = xxx.c	所需的源文件
+	INCLUDES = -I head		所需头文件目录
+	src/head/目录：
+	AUTOMAKE_OPTIONS = foreign	检查级别
+(2)生成config.h.in用于生成config.h
+	autoheader
+(3)自动添加缺省文件，这一步生成Makefile.in
+	automake -a或--add-missing
+
+生成Makefile，编译，安装，卸载
+(1)生成Makefile
+	./configure
+(2)编译
+	make
+(3)安装
+	make install
+(4)卸载
+	make uninstall
+
+注意：  (1)使用INCLUDES = -I 头文件目录 
+	   执行automake -a 会报警告，说它是旧的名称
+	   可以使用hello_CFLAGS = -I 头文件目录保存
+	(2)make dist打包
+	   必须保证每个目录都有Makefile.am生成的Makefile才能被打包
+	(3)${top_srcdir}变量
+	   该变量表示工程顶层目录
+	   INCLUDES = -I ../head/ 等价与 INCLUDES = -I ${top_srcdir}/src/head/
+	   当子模块内还有模块时，这样很管用
+	(4)不编译库，只编译目标文件
+	   hello_SOURCES = main.c 所有模块的源文件
+	   各个模块的Makefile.am只保留
+	   AUTOMAKE_OPTIONS = foreign	检查级别
+	   INCLUDES = -I head		所需头文件目录
+	   这时编译的目标文件与main.c在同一目录
+
+

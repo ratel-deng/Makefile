@@ -1,0 +1,35 @@
+flat目录：所有文件都放在同一个目录中
+生成configure部分(配置脚本)
+(1)扫描项目生成configure.scan和autoscan.log
+	autoscan
+(2)修改configure.scan
+	mv configure.scan configure.ac
+	vi configure.ac
+	AC_INIT(包的名字，版本号，邮箱)
+	添加automake的宏 AM_INIT_AUTOMAKE
+	AC_OUTPUT(要生成的makefile，可以带路径)
+(3)生成aclocal.m4宏文件，该文件集合了该工程里的宏
+	aclocal
+(4)将configure.ac生成configure
+	autoconf
+
+生成Makefile.in部分(通用的Makefile)
+(1)手动写Makefile.am，该文件可以看作是对Makefile的配置文件
+	AUTOMAKE_OPTIONS =foreign	检查级别
+	bin_PROGRAMS =hello		生成的链接文件
+	hello_SOURCES =bluetooth.c  lcd.c  led.c  main.c  net.c  sound.c  usb.c
+	生成hello需要的源文件
+(2)生成config.h.in用于生成config.h
+	autoheader
+(3)自动添加缺省文件，这一步生成Makefile.in
+	automake -a或--add-missing
+
+生成Makefile，编译，安装，卸载
+(1)生成Makefile
+	./configure
+(2)编译
+	make
+(3)安装
+	make install
+(4)卸载
+	make uninstall

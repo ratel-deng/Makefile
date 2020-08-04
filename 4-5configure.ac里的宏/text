@@ -1,0 +1,10 @@
+AC_INIT			一般以此开头
+AC_PROG_CC		检测c编译器，c项目需要设置此宏
+AC_CONFIG_SRCDIR	项目源文件
+AC_CONFIG_HEADERS	配置头文件config.h
+AC_CHECK_LIB		检测lib库中是否有指定函数
+AC_PROG_LIBTOOL		使用libtool生成动态共享库
+AC_PROG_RANLIB		静态库
+AC_OUTPUT		设置configure输出的Makefile文件
+AM_INIT_AUTOMAKE	运行Automake必须的宏
+dnl或#			注释标志

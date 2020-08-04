@@ -1,0 +1,28 @@
+文件编译类型：
+_PROGRAMS	表示生成的目标是可执行文件
+_LIBRARIES	生成目标为库文件
+_LTLIBRARIES	使用LIBTOOL生成库文件
+_HEADERS	头文件
+_DATA		数据文件、配置文件等
+
+编译配置：
+_SOURCES	目标依赖的源文件
+_LIBADD		生成库时需要链接的其它库
+_LDADD		链接需要链接的库
+_LDFLAGS	链接选项：-I -L -shared -fPIC
+_LIBTOOLFLAGS	Libtool编译选项
+
+路径变量：	${prefix}默认等于/usr/local
+bindir		${prefix}/bin
+libdir		${prefix}/lib
+datadir		${prefix}/share
+sysconfdir	${prefix}/etc
+includedir	${prefix}/include
+${top_srcdir}	工程顶层目录
+${top_builddir}	目标文件顶层目录
+noinst		不安装
+
+其它变量：
+INCLUDES	链接所需头文件
+SUBDIRS		递归处理子目录
+EXTRA_DIST	打包文件或目录
