@@ -1,0 +1,10 @@
+libtool可以生成在不同平台运行的动态链接库
+libtool包：
+	包含libtool和libtoolize两个工具包
+	使用libtool之前，先使用libtoolize，生成本地化的libtool
+安装：  apt install libtool	安装libtoolize
+	apt install libtool-bin 安装libtool
+
+--tag
+	
+
