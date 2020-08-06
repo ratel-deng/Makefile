@@ -6,5 +6,75 @@ libtool包：
 	apt install libtool-bin 安装libtool
 
 --tag
-	
+语言		tag名称
+c		CC
+c++		CXX
+java		GCJ
+go		GO
+fortran		FC
+fortran 77	F77
+
+--mode
+选项		说明
+compile		将一个源文件编译为Libtool目标文件
+link		生成一个库或可执行文件
+install		安装一个库或可执行文件
+execute		运行可执行文件，并自动设置库路径
+uninstall	卸载库
+clean		从编译目录清除生成的文件
+finish		完成库Libtool文件的安装
+
+命令行用法：
+libtool --tag=CC --mode=compile gcc -o demo.lo -c demo.c
+生成libdemo.la需要的目标文件demo.lo
+libtool --tag=CC --mode=link gcc -o libdemo.la demo.lo
+生成libdemo.la
+libtool --tag=CC --mode=link gcc -o hello.out hello.o libdemo.la
+生成可执行文件
+libtool --mode=install install -c libdamo.la /usr/local/lib/
+将该库安装到系统
+libtool --mode=uninstall rm /usr/local/lib/libdamo.la
+将该库从系统卸载
+
+与automake一起使用：
+vi Makefile.am
+	创建Makefile.am
+	AUTOMAKE_OPTIONS = foreign
+	lib_LTLIBRARIES = libjpg.la
+	##编译为libtool库
+	libjpg_la_SOURCES = jpg.c
+	##所需的源文件
+	include_HEADERS = jpg.h
+	##安装头文件
+autoscan
+	扫描工程，生成configure.scan文件
+mv configure.scan configure.ac
+	改名为configure.ac
+vi configure.ac
+	配置configure.ac
+	AC_PREREQ([2.69])
+	AC_INIT(libjpg.la,v1.0,xxx@qq.com)	生成libjpg.la
+	AC_CONFIG_SRCDIR([jpg.c])
+	AC_CONFIG_HEADERS([config.h])
+	AM_INIT_AUTOMAKE			使用automake
+	# Checks for programs.
+	AC_PROG_CC
+	AC_PROG_LIBTOOL				使用libtool的宏
+	# Checks for library functions.
+	AC_CONFIG_FILES([Makefile])
+	AC_OUTPUT
+aclocal
+	生成aclocal.m4宏文件，该文件集合了该工程里的宏
+autoconf
+	将configure.ac生成configure
+autoheader
+	生成config.h.in用于生成config.h
+libtoolize --automake
+	告诉automake，将会使用libtool
+automake -a
+	自动添加缺省文件，这一步生成Makefile.in
+./configure
+	生成Makefile
+make
+	编译，生成libjpg.la
 

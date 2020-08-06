@@ -1,0 +1,75 @@
+以libtool_hello工程为例子，将net模块编译为libtool动态共享库
+
+vi ../src/net/Makefile.am
+	AUTOMAKE_OPTIONS = foreign
+	lib_LTLIBRARIES = libnet.la
+	##生成libnet.la且安装到/usr/local/lib/目录
+	libnet_la_SOURCES = net.c
+	libnet_la_LDFLAGS = -shared -fPIC
+	##链接选项-shared -fPIC 可选项，不写automake也会自动添加
+	libnet_la_CFLAGS = -I ../head/
+	##头文件路径
+vi ../src/Makefile.am
+	AUTOMAKE_OPTIONS = foreign
+	bin_PROGRAMS = hello
+	hello_SOURCES = main.c
+	hello_CFLAGS = -I head
+	##头文件路径
+	hello_LDADD = bluetooth/libbluetooth.a lcd/liblcd.a led/libled.a sound/libsound.a usb/libusb.a
+	hello_LDFLAGS = -Lnet
+	##libtool动态共享库的路径
+	LIBS = -lnet
+	##定义一个变量LIBS动态链接库的名字
+	SUBDIRS = bluetooth head lcd led net sound usb
+autoscan
+	扫描工程，生成configure.scan文件
+mv configure.scan configure.ac
+	改名为configure.ac
+vi configure.ac
+	AC_PREREQ([2.69])
+	AC_INIT(hello,v1.0,xxx@qq.com)
+	AC_CONFIG_SRCDIR([src/main.c])
+	AC_CONFIG_HEADERS([config.h])
+	AM_INIT_AUTOMAKE
+	# Checks for programs.
+	AC_PROG_CC
+	# Checks for libraries.
+	# FIXME: Replace `main' with a function in `-lnet':
+	AC_CHECK_LIB([net], [main])
+	AC_PROG_RANLIB
+	AC_PROG_LIBTOOL					使用libtool的宏
+	# Checks for library functions.
+	AC_CONFIG_FILES([Makefile
+        	         src/Makefile
+                	 src/bluetooth/Makefile
+        	         src/head/Makefile
+                	 src/lcd/Makefile
+                	 src/led/Makefile
+                	 src/net/Makefile
+                	 src/sound/Makefile
+                	 src/usb/Makefile])
+	AC_OUTPUT
+aclocal
+	生成aclocal.m4宏文件，该文件集合了该工程里的宏
+autoconf
+	将configure.ac生成configure
+autoheader
+	生成config.h.in用于生成config.h
+libtoolize --automake
+	告诉automake，将会使用libtool
+automake -a
+	自动添加缺省文件，这一步生成Makefile.in
+./configure
+	生成Makefile
+make
+	编译，生成libnet.la
+
+将动态库路径添加到系统路径：
+cd /etc/ld.so.conf.d/
+vi x86_64-linux-gnu.conf
+	先用uname查看自己的系统，找到对应的xxx-linux-gnu.conf文件
+	在最后加上
+	/usr/local/lib
+ldconfig
+	生效刚才的修改，刷新/etc/ld.so.cache文件
+此时make install安装的程序才能正常执行
