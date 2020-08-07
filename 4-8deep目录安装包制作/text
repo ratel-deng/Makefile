@@ -1,0 +1,76 @@
+流程大致与shallow目录相同
+
+(1)新建工程各级的Makefile.am
+在deep_hello目录下
+	vi Makefile.am
+	AUTOMAKE_OPTIONS = foreign
+	SUBDIRS = src
+	
+	vi src/Makefile.am
+	AUTOMAKE_OPTIONS = foreign
+	SUBDIRS = head usb sound lcd net led bluetooth main
+
+	vi src/main/Makefile.am
+	AUTOMAKE_OPTIONS = foreign
+	bin_PROGRAMS = hello
+	hello_SOURCES = main.c
+	hello_CFLAGS = -I ../head
+	hello_LDADD = ../bluetooth/libbluetooth.a ../lcd/liblcd.a ../led/libled.a ../sound/libsound.a ../usb/libusb.a
+	hello_LDFLAGS = -L../net
+	##libtool动态共享库的路径
+	LIBS = -lnet
+	##定义一个变量LIBS动态链接库的名字
+
+	vi src/net/Makefile.am
+	AUTOMAKE_OPTIONS = foreign
+	lib_LTLIBRARIES = libnet.la
+	libnet_la_SOURCES = net.c
+	libnet_la_LDFLAGS = -shared -fPIC
+	##链接选项-shared -fPIC 可选项，不写automake也会自动添加
+	libnet_la_CFLAGS = -I ../head/
+	##头文件路径
+	
+	vi src/head/Makefile.am
+	AUTOMAKE_OPTIONS = foreign
+	include_HEADERS = hello.h heads.h net.h
+	noinst_HEADERS = bluetooth.h led.h usb.h lcd.h sound.h
+
+	vi src/xxx/Makefile.am
+	AUTOMAKE_OPTIONS = foreign
+	noinst_LIBRARIES = libxxx.a
+	libxxx_a_SOURCES = xxx.c
+	INCLUDES = -I ${top_srcdir}/src/head/
+(2)autoscan
+	autoscan
+	mv configure.scan configure.ac
+	vi configure.ac
+	需要添加和修改的地方
+	AC_INIT(hello,v1.0,xxx@qq.com)
+	AC_CONFIG_SRCDIR([config.h.in],src/main/main.c)
+	AM_INIT_AUTOMAKE
+
+	# Checks for libraries.
+	AC_PROG_LIBTOOL
+(3)aclocal
+	生成aclocal.m4宏文件，该文件集合了该工程里的宏
+(4)autoconf
+	将configure.ac生成configure
+(5)libtoolize --automake
+	告诉automake，将使用libtool
+(6)autoheader
+	生成config.h.in用于生成config.h
+(7)automake -a
+	自动添加缺省文件，这一步生成Makefile.in
+(8)./configure
+	生成各级Makefile
+
+将动态库路径添加到系统路径：
+cd /etc/ld.so.conf.d/
+vi x86_64-linux-gnu.conf
+	先用uname查看自己的系统，找到对应的xxx-linux-gnu.conf文件
+	在最后加上
+	/usr/local/lib
+ldconfig
+	生效刚才的修改，刷新/etc/ld.so.cache文件
+此时make install安装的程序才能正常执行
+
