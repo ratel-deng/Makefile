@@ -1,0 +1,47 @@
+以hello_4-7为例子
+分别使用第三方的jpg和video
+
+使用jpg时(第三方静态库)：
+(1)
+将jpg.h复制到hello_4-7/libs_head
+将libjpg.a复制到hello_4-7/libs
+并建立Makefile.am
+	vi hello_4-7/libs_head/Makefile.am
+	AUTOMAKE_OPTIONS = foreign
+	noinst_HEADERS = jpg.h
+
+	vi hello_4-7/libs/Makefile.am
+	AUTOMAKE_OPTIONS = foreign
+(2)
+修改hello_4-7/src/Makefile.am
+	hello_CFLAGS = -I head -I ../libs_head
+	hello_LDADD = bluetooth/libbluetooth.a lcd/liblcd.a led/libled.a sound/libsound.a usb/libusb.a ../libs/libjpg.a	
+(3)
+生成新的Makefile
+automake -a
+./configure
+(4)
+编译安装
+make
+make install
+
+使用video(第三方动态共享库)：
+(1)
+在动态共享库目录libs/video/生成libvideo.la，并安装到系统(详见4-6)
+	ldconfig /etc/ld.so.conf.d/x86_64-linux-gnu.conf
+	刷新库的系统路径
+(2)
+修改hello_4-7/src/Makefile.am
+	LIBS = -lnet -lvideo
+	将该库的名字添加到编译选项
+(3)
+生成新的Makefile
+automake -a
+./configure
+(4)
+编译安装，刷新路径
+make
+make install
+ldconfig /etc/ld.so.conf.d/x86_64-linux-gnu.conf
+
+建议把刷新路径的命令写到make和make install执行时的语句里
